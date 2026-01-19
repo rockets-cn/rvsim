@@ -1,4 +1,4 @@
-﻿// clint.c: CLINT, UART, PLIC, virtio emulation
+// clint.c: CLINT, UART, PLIC, virtio emulation
 #include <stdint.h>
 #include <stdio.h>
 #include <assert.h>
@@ -87,7 +87,7 @@ uint32_t plic_write(uint32_t addr, uint32_t* data)
 	}
 	else if (addr == PLIC_CLAIM) {
 		// clear corresponding pending bit
-		uint32_t* p = plic_pending[*data >> 5];
+		uint32_t* p = &plic_pending[*data >> 5];
 		*p &= ~(1 << (*data & 0x1f));
 
 		plic_claim = 0 ;		// TODO: should be next pending interrupt? current way only works if there is single pending interrupt
@@ -247,8 +247,8 @@ int vio_disk_access()
 	// address of used
 	uint32_t used = virtq + 4096;	// per xv6-rv32
 
-	// update used.idx; 
-	pa_mem_interface(MEM_WRITE, used + 4 + 8 * vio_used_idx, MEM_WORD, head_index, &interrupt);
+	// update used.idx;
+	pa_mem_interface(MEM_WRITE, used + 4 + 8 * vio_used_idx, MEM_WORD, &head_index, &interrupt);
 
 	// update used.idx; vio_used_idx is same as used.idx
 	vio_used_idx = (vio_used_idx + 1) % VIO_QUEUE_SIZE;

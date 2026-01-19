@@ -1,4 +1,4 @@
-﻿#include <stdio.h>
+#include <stdio.h>
 #include <stdint.h>
 #include <assert.h>
 #include <stdlib.h> //for exit()
@@ -588,9 +588,9 @@ void atomic_op(int sub7 , int rd , int rs1 , int rs2)
 
     // NOTE: register access order critical as rd&rs1 can be the same register
     addr = read_reg(rs1);   // memory address
+    data2 = read_reg(rs2);  // the other piece in register
     if (!lrsc) {
         rw_memory(MEM_READ, addr, MEM_WORD, &data);    // one piece of data in memory 
-        data2 = read_reg(rs2);  // the other piece in register
     }
 
     switch (sub7 >> 4) {
